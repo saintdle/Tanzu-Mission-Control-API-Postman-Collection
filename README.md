@@ -11,3 +11,5 @@ The commands in this collection use the v1alpha1 APIs, which are currently the l
 * Official API Documentation here:
 
   > https://code.vmware.com/apis/1079/tanzu-mission-control
+
+![image](https://user-images.githubusercontent.com/22192242/123399257-4ee24c00-d59c-11eb-8c0e-b37806127fe6.png)
