@@ -1,0 +1,1935 @@
+{
+	"info": {
+		"_postman_id": "1a0df491-3d6f-4c05-a18d-1fa574044bb0",
+		"name": "Tanzu Mission Control",
+		"description": "This collection is a number of tasks for operating VMware Tanzu Mission Control. The fleet management platform for Kubernetes offered by VMware. \n\nThe commands in this collection use the v1alpha1 APIs, which are currently the latest release. And should be used appropriately. \n\nOfficial API Documentation here:\n\nhttps://code.vmware.com/apis/1079/tanzu-mission-control",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Get Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Response contains access token\"] = responseBody.has(\"access_token\");",
+									"pm.collectionVariables.unset(\"accessToken\");",
+									"var data = JSON.parse(responseBody);",
+									"tests[\"Auth token is not null\"] = data.refresh_token !== \"\";",
+									"pm.collectionVariables.set(\"accessToken\", data.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://console.cloud.vmware.com/csp/gateway/am/api/auth/api-tokens/authorize?refresh_token={{refreshToken}}",
+							"protocol": "https",
+							"host": [
+								"console",
+								"cloud",
+								"vmware",
+								"com"
+							],
+							"path": [
+								"csp",
+								"gateway",
+								"am",
+								"api",
+								"auth",
+								"api-tokens",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "refresh_token",
+									"value": "{{refreshToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organisation ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Response contains Org Id\"] = responseBody.has(\"orgId\");",
+									"pm.collectionVariables.unset(\"orgId\");",
+									"var data = JSON.parse(responseBody);",
+									"tests[\"Org Id is not null\"] = data.orgId !== \"\";",
+									"pm.collectionVariables.set(\"orgId\", data.orgId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tokenValue\": \"{{refreshToken}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://console.cloud.vmware.com/csp/gateway/am/api/auth/api-tokens/details",
+							"protocol": "https",
+							"host": [
+								"console",
+								"cloud",
+								"vmware",
+								"com"
+							],
+							"path": [
+								"csp",
+								"gateway",
+								"am",
+								"api",
+								"auth",
+								"api-tokens",
+								"details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Audits",
+			"item": [
+				{
+					"name": "List Audits",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/audits",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"audits"
+							],
+							"query": [
+								{
+									"key": "searchScope.name",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "query",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "pagination.offset",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "pagination.size",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "includeTotalCount",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Audit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"audit\": {\n        \"type\": {\n            \"kind\": \"Audit\",\n            \"version\": \"v1alpha1\",\n            \"package\": \"vmware.tanzu.manage.v1alpha1.audit\"\n        },\n        \"fullName\": {\n            \"orgId\": \"{{orgId}}\",\n            \"name\": \"dolore consequat pariatur\"\n        },\n        \"meta\": {\n        },\n        \"spec\": {\n        }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/audits",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"audits"
+							],
+							"query": [
+								{
+									"key": "searchScope.name",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "query",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "pagination.offset",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "pagination.size",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "includeTotalCount",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Provide a name for the audit in the body"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Audit",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/audits/:fullName.name?fullName.orgId=",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"audits",
+								":fullName.name"
+							],
+							"query": [
+								{
+									"key": "fullName.orgId",
+									"value": ""
+								}
+							],
+							"variable": [
+								{
+									"key": "fullName.name",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Audit",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/audits/:fullName.name?fullName.orgId=",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"audits",
+								":fullName.name"
+							],
+							"query": [
+								{
+									"key": "fullName.orgId",
+									"value": ""
+								}
+							],
+							"variable": [
+								{
+									"key": "fullName.name",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Attach Cluster",
+			"item": [
+				{
+					"name": "Attach new cluster",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Response contains Installer link\"] = responseBody.has(\"installerLink\");",
+									"postman.clearEnvironmentVariable(\"installerLink\");",
+									"var data = JSON.parse(responseBody);",
+									"tests[\"installerLink is not null\"] = data.cluster.status.installerLink !== \"\";",
+									"postman.setEnvironmentVariable(\"installerLink\", data.cluster.status.installerLink);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cluster\": {\n        \"fullName\": {\n            \"managementClusterName\": \"attached\",\n            \"provisionerName\": \"attached\",\n            \"name\": \"{{clusterName}}\"\n        },\n        \"meta\": {},\n        \"spec\": {\n            \"clusterGroupName\": \"default\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clusters",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "Provide Cluster name as variable on collection or in body\n\nAfter running this API, you need to get the TMC Agent Installer Link so you can run this on your Kubernetes cluster."
+					},
+					"response": []
+				},
+				{
+					"name": "Get TMC Agent Installer information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{installerLink}}",
+							"host": [
+								"{{installerLink}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "List Clusters",
+			"item": [
+				{
+					"name": "Get Clusters List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clusters?searchScope.name=*",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters"
+							],
+							"query": [
+								{
+									"key": "searchScope.name",
+									"value": "*"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specified Cluster details and set as variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Response contains cluster name\"] = responseBody.has(\"clusterName\");",
+									"tests[\"Response contains provisioner name\"] = responseBody.has(\"provisionerName\");",
+									"tests[\"Response contains management cluster name\"] = responseBody.has(\"managementClusterName\");",
+									"pm.collectionVariables.unset(\"clusterName\");",
+									"pm.collectionVariables.unset(\"provisionerName\");",
+									"pm.collectionVariables.unset(\"managementClusterName\");",
+									"var data = JSON.parse(responseBody);",
+									"tests[\"Auth token is not null\"] = data.refresh_token !== \"\";",
+									"pm.collectionVariables.set(\"clusterName\", data.clusters[0].fullName.clusterName);",
+									"pm.collectionVariables.set(\"provisionerName\", data.clusters[0].fullName.provisionerName);",
+									"pm.collectionVariables.set(\"managementClusterName\", data.clusters[0].fullName.managementClusterName);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clusters?searchScope.name=",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters"
+							],
+							"query": [
+								{
+									"key": "searchScope.name",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Management Clusters List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/managementclusters?searchScope.name",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"managementclusters"
+							],
+							"query": [
+								{
+									"key": "searchScope.name",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specified Attached Cluster",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clusters/:fullName.clusterName?full_name.managementClusterName=attached&full_name.provisionerName=attached",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters",
+								":fullName.clusterName"
+							],
+							"query": [
+								{
+									"key": "full_name.managementClusterName",
+									"value": "attached"
+								},
+								{
+									"key": "full_name.provisionerName",
+									"value": "attached"
+								}
+							],
+							"variable": [
+								{
+									"key": "fullName.clusterName",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specified Provisioned Cluster",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clusters/:fullName.clusterName?full_name.managementClusterName=&full_name.provisionerName=",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters",
+								":fullName.clusterName"
+							],
+							"query": [
+								{
+									"key": "full_name.managementClusterName",
+									"value": ""
+								},
+								{
+									"key": "full_name.provisionerName",
+									"value": ""
+								}
+							],
+							"variable": [
+								{
+									"key": "fullName.clusterName",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cluster Groups",
+			"item": [
+				{
+					"name": "Move a Cluster Between Groups",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cluster\": {\n    \"type\": {\n      \"kind\": \"Cluster\",\n      \"version\": \"v1alpha1\",\n      \"package\": \"vmware.tanzu.manage.v1alpha1.cluster\"\n    },\n    \"fullName\": {\n      \"managementClusterName\": \"attached\",\n      \"provisionerName\": \"attached\",\n      \"name\": \"cluster-name\"\n    },\n    \"meta\": {\n        \"resourceVersion\": \"649\"\n    },\n    \"spec\": {\n      \"clusterGroupName\": \"default\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clusters/:fullName.clusterName",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters",
+								":fullName.clusterName"
+							],
+							"variable": [
+								{
+									"key": "fullName.clusterName",
+									"value": ""
+								}
+							]
+						},
+						"description": "Set cluster name to be moved in body\n\nMay have to alter resource version to match the destination cluster group name set under spec."
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Cluster Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"clusterGroup\": {\n        \"fullName\": {\n            \"name\": \"Cluster-Group-Name\"\n        },\n        \"meta\": {\n            \"description\": \"Cluster-Group-Description\",\n            \"labels\": {\"labelkey\":\"labelvalue\"}\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clustergroups",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clustergroups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Cluster Group",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clustergroups/:cluster_group",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clustergroups",
+								":cluster_group"
+							],
+							"variable": [
+								{
+									"key": "cluster_group",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Cluster Groups",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clustergroups?searchScope.name=*",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clustergroups"
+							],
+							"query": [
+								{
+									"key": "searchScope.name",
+									"value": "*"
+								},
+								{
+									"key": "sortBy",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "query",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "pagination.offset",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "pagination.size",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "includeTotalCount",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Data Protection",
+			"item": [
+				{
+					"name": "Backup Locations",
+					"item": [
+						{
+							"name": "List Backup Locations",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/dataprotection/providers/:backupLocation.fullName.providerName/backuplocations",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"dataprotection",
+										"providers",
+										":backupLocation.fullName.providerName",
+										"backuplocations"
+									],
+									"query": [
+										{
+											"key": "searchScope.name",
+											"value": "",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "backupLocation.fullName.providerName",
+											"value": "tmc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List All Backups for a Specified Backup Location",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1alpha1/clusters/*/dataprotection/backups?query=spec.storage_location:'{{dataProtectionLocation}}'",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										"*",
+										"dataprotection",
+										"backups"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "spec.storage_location:'{{dataProtectionLocation}}'"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Backup Locations Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/dataprotection/providers/:backupLocation.fullName.providerName/backuplocations/:backupLocation.fullName",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"dataprotection",
+										"providers",
+										":backupLocation.fullName.providerName",
+										"backuplocations",
+										":backupLocation.fullName"
+									],
+									"variable": [
+										{
+											"key": "backupLocation.fullName.providerName",
+											"value": "tmc"
+										},
+										{
+											"key": "backupLocation.fullName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Configure Backup Job",
+					"item": [
+						{
+							"name": "Get Backup Details in a Cluster",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:backup.fullName.clusterName/dataprotection/backups/test-dean-api/:backup.fullName.backupName",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"backups",
+										"test-dean-api",
+										":backup.fullName.backupName"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										},
+										{
+											"key": "backup.fullName.backupName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Backup Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:backup.fullName.clusterName/dataprotection/backups/:backup.fullName.backupName",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"backups",
+										":backup.fullName.backupName"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										},
+										{
+											"key": "backup.fullName.backupName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Backup of a Namespace Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"backup\":{\n      \"type\":{\n         \"kind\":\"Backup\",\n         \"version\":\"v1alpha1\",\n         \"package\":\"vmware.tanzu.manage.v1alpha1.cluster.dataprotection.backup\"\n      },\n      \"fullName\":{\n         \"orgId\":\"{{orgId}}\",\n         \"managementClusterName\":\"{{managementClusterName}}\",\n         \"provisionerName\":\"{{provisionerName}}\",\n         \"clusterName\":\"{{clusterName}}\",\n         \"name\":\"backupname\"\n      },\n      \"meta\":{\n      },\n      \"spec\":{\n         \"includedNamespaces\":[\n            \"cpu-example\"\n         ],\n         \"excludedNamespaces\":[\n         ],\n         \"snapshotVolumes\": false,\n         \"ttl\": \"172800s\",\n         \"includeClusterResources\": false,\n         \"storageLocation\": \"{{dataProtectionLocation}}\",\n         \"volumeSnapshotLocations\": [\n                ]\n      }\n   }\n}"
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:backup.fullName.clusterName/dataprotection/backups",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"backups"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										}
+									]
+								},
+								"description": "Enter a backup name in the body"
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Backup of a Entire Cluster",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"backup\": {\n    \"full_name\": {\n      \"orgId\":\"{{orgId}}\",\n      \"managementClusterName\":\"{{managementClusterName}}\",\n      \"provisionerName\":\"{{provisionerName}}\",\n      \"name\": \"backupname\",\n      \"cluster_name\": \"{{clusterName}}\"\n    },\n    \"spec\": {\n      \"include_cluster_resources\": true,\n      \"ttl\": \"24h0m0s\",\n      \"storage_location\": \"{{dataProtectionLocation}}\"\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:backup.fullName.clusterName/dataprotection/backups",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"backups"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										}
+									]
+								},
+								"description": "Enter backup name in the body"
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Backup based on Labels",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"backup\":{\n      \"type\":{\n         \"kind\":\"Backup\",\n         \"version\":\"v1alpha1\",\n         \"package\":\"vmware.tanzu.manage.v1alpha1.cluster.dataprotection.backup\"\n      },\n      \"fullName\":{\n         \"orgId\":\"{{orgId}}\",\n         \"managementClusterName\":\"{{managementClusterName}}\",\n         \"provisionerName\":\"{{provisionerName}}\",\n         \"clusterName\":\"{{clusterName}}\",\n         \"name\":\"backupname\"\n      },\n      \"meta\":{\n         \n      },\n      \"spec\":{\n         \"includedNamespaces\":[\n         ],\n         \"excludedNamespaces\":[\n         ],\n         \"label_selector\": {\n             \"matchLabels\": {\n                \"key\": \"value\"\n        }\n      },\n         \"snapshotVolumes\": false,\n         \"ttl\": \"172800s\",\n         \"includeClusterResources\": false,\n         \"storageLocation\": \"{{dataProtectionLocation}}\",\n         \"volumeSnapshotLocations\": [\n                ]\n      }\n   }\n}"
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:backup.fullName.clusterName/dataprotection/backups",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"backups"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Backup Storage Credentials",
+					"item": [
+						{
+							"name": "Create Data Protection Credential",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"credential\": {\n    \"full_name\": {\n      \"name\": \"data-protection-credential\"\n    },\n    \"spec\": {\n      \"data\": {\n        \"keyValue\": {\n            \"type\": \"OPAQUE_SECRET_TYPE\",\n            \"data\": {\n                \"aws_access_key_id\": \"xxxx\", \n                \"aws_secret_access_key\": \"xxxx\"\n            }\n        }\n      },\n      \"capability\": \"DATA_PROTECTION\"\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/account/credentials",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"account",
+										"credentials"
+									]
+								},
+								"description": "Used to create credentials for use with AWS S3 bucket to store your backups\n\nSet name\nAWS Access Key and Secret must be Base64 encoded"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Data Protection Provider Credential",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"credential\": {\n    \"full_name\": {\n      \"name\": \"Data-Protection-Cred-Name\"\n    },\n    \"spec\": {\n      \"aws_cred\": {\n        \"assume_role\": {\n        \"role_arn\": \"arn:aws:iam::AWS-Account-ID:role/VMwareTMCProviderCredentialMgr\"\n        }\n      },\n      \"metadata\": {\n        \"provider\": \"AWS\",\n        \"provider_acct_id\": \"AWS-Account-ID\",\n        \"service_associations\": [\"DATA_PROTECTION\"]\n      }\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha/account/provider/credentials",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha",
+										"account",
+										"provider",
+										"credentials"
+									]
+								},
+								"description": "Link your AWS account credentials provided the created ARN for TMC Data Protection feature.\n\nSet name\nAWS account ID for the role-arn and provider account id."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Data Protection Credential",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"credential\": {\n    \"full_name\": {\n      \"name\": \"data-protection-credential\"\n    },\n    \"spec\": {\n      \"data\": {\n        \"keyValue\": {\n            \"type\": \"OPAQUE_SECRET_TYPE\",\n            \"data\": {\n                \"aws_access_key_id\": \"xxxx\", \n                \"aws_secret_access_key\": \"xxxx\"\n            }\n        }\n      },\n      \"capability\": \"DATA_PROTECTION\"\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/account/credentials/:dataProtection.fullName",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"account",
+										"credentials",
+										":dataProtection.fullName"
+									],
+									"variable": [
+										{
+											"key": "dataProtection.fullName",
+											"value": ""
+										}
+									]
+								},
+								"description": "Used to create credentials for use with AWS S3 bucket to store your backups\n\nSet name\nAWS Access Key and Secret must be Base64 encoded"
+							},
+							"response": []
+						},
+						{
+							"name": "List Data Protection Credentials",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/account/credentials",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"account",
+										"credentials"
+									]
+								},
+								"description": "Used to create credentials for use with AWS S3 bucket to store your backups\n\nSet name\nAWS Access Key and Secret must be Base64 encoded"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List Backups",
+					"item": [
+						{
+							"name": "List Backups for Specified Cluster",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1alpha1/clusters/:backup.fullName.clusterName/dataprotection/backups",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"backups"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Configure Data Protection for a Cluster",
+					"item": [
+						{
+							"name": "Enable Data Protection on a Cluster",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dataprotection\": {\n            \"full_name\": {\n                \"cluster_name\": \"cluster_name\"\n            },\n            \"spec\": {\n                \"use_restic\": false,\n                \"backup_location_names\": [\"{{dataProtectionLocation}}\"]\n            }\n        }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:fullname.clusterName/dataprotection",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":fullname.clusterName",
+										"dataprotection"
+									],
+									"variable": [
+										{
+											"key": "fullname.clusterName",
+											"value": ""
+										}
+									]
+								},
+								"description": "Enable Data Protection feature for a cluster\nInsert cluster name in the body"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Data Protection on a Cluster",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dataprotection\": {\n            \"full_name\": {\n                \"cluster_name\": \"cluster_name\"\n            },\n            \"spec\": {\n                \"use_restic\": false,\n                \"backup_location_names\": [\"{{dataProtectionLocation}}\"]\n            }\n        }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:fullname.clusterName/dataprotection",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":fullname.clusterName",
+										"dataprotection"
+									],
+									"query": [
+										{
+											"key": "delete_backups",
+											"value": "true",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "fullname.clusterName",
+											"value": ""
+										}
+									]
+								},
+								"description": "Enable Data Protection feature for a cluster\nInsert cluster name in the body"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Data Protection Status for a Cluster",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:fullname.clusterName/dataprotection",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":fullname.clusterName",
+										"dataprotection"
+									],
+									"variable": [
+										{
+											"key": "fullname.clusterName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Configure Backup Schedule",
+					"item": [
+						{
+							"name": "Create a Backup Schedule",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"schedule\": {\n        \"full_name\": {\n            \"org_id\": \"{{org_Id}}\",\n            \"cluster_name\": \"{{clusterName}}\",\n            \"name\": \"schedule-name\",\n        },\n        \"spec\": {\n            \"template\": {\n                \"included_namespaces\": [\n                    \"namespace-name-1\",\n                    \"namespace-name-2\"\n                ],\n                \"label_selector\": {\n                    \"matchLabels\": {\n                        \"label-key-1\": \"label-value-1\",\n                        \"label-key-2\": \"label-value-2\"\n                    }\n                },\n                \"snapshot_volumes\": true,\n                \"include_cluster_resources\": true,\n                \"storage_location\": \"{{dataProtectionLocation}}\"\n            },\n            \"schedule\": \"0 7 * * *\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha/clusters/:backup.fullName.clusterName/dataprotection/schedules",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"schedules"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										}
+									]
+								},
+								"description": "Provide a schedule name in the body as well as the chosen resources"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Backup Schedule",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha/clusters/:backup.fullName.clusterName/dataprotection/schedules/:backup.fullName.scheduleName",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"schedules",
+										":backup.fullName.scheduleName"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": ""
+										},
+										{
+											"key": "backup.fullName.scheduleName",
+											"value": ""
+										}
+									]
+								},
+								"description": "Provide a schedule name in the body as well as the chosen resources"
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Backup Schedules",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/clusters/:backup.fullName.clusterName/dataprotection/schedules",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"clusters",
+										":backup.fullName.clusterName",
+										"dataprotection",
+										"schedules"
+									],
+									"variable": [
+										{
+											"key": "backup.fullName.clusterName",
+											"value": "*"
+										}
+									]
+								},
+								"description": "Provide a schedule name in the body as well as the chosen resources"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List Backup Providers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/dataprotection/providers",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"dataprotection",
+								"providers"
+							],
+							"query": [
+								{
+									"key": "searchScope.name",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cluster Inspections",
+			"item": [
+				{
+					"name": "List Scans Against Cluster",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1alpha1/clusters/:scan.fullName.clusterName/inspection/scans",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters",
+								":scan.fullName.clusterName",
+								"inspection",
+								"scans"
+							],
+							"query": [
+								{
+									"key": "searchScope.managementClusterName",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "searchScope.provisionerName",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "searchScope.name",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "query",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "pagination.offset",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "pagination.size",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								},
+								{
+									"key": "includeTotalCount",
+									"value": "true",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "scan.fullName.clusterName",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Scan Against Cluster",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"scan\": {\n        \"type\": {\n            \"kind\": \"Scan\",\n            \"version\": \"v1alpha1\",\n            \"package\": \"vmware.tanzu.manage.v1alpha1.cluster.inspection.scan\"\n        },\n        \"fullName\": {\n            \"orgId\": \"{{orgId}}\",\n            \"managementClusterName\": \"{{managementClusterName}}\",\n            \"provisionerName\": \"{{provisionerName}}\",\n            \"clusterName\": \"{{clusterName}}\",\n            \"name\": \"Scan-name\"\n        },\n        \"spec\": {\n            \"cisSpec\": {}\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/clusters/:scan.fullName.clusterName/inspection/scans",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"clusters",
+								":scan.fullName.clusterName",
+								"inspection",
+								"scans"
+							],
+							"variable": [
+								{
+									"key": "scan.fullName.clusterName",
+									"value": ""
+								}
+							]
+						},
+						"description": "Provide scan name\nUnder spec, you can specify one of the following values, trying to run more than one scan at once on a cluster will result in a success 200, but nothing will happen.\n\n        \"spec\": {\n            \"conformanceSpec\": {},\n            \"e2eSpec\": {},\n            \"liteSpec\": {},\n            \"cisSpec\": {\n                \"cisTargets\": [\n                    \"TARGETS_UNSPECIFIED\",\n                    \"TARGETS_UNSPECIFIED\"\n                ]\n            }\n        },"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "XXXX.tmc.cloud.vmware.com"
+		},
+		{
+			"key": "refreshToken",
+			"value": ""
+		},
+		{
+			"key": "orgId",
+			"value": ""
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"key": "cluster_Name",
+			"value": ""
+		},
+		{
+			"key": "installerLink",
+			"value": ""
+		},
+		{
+			"key": "provisionerName",
+			"value": ""
+		},
+		{
+			"key": "managementClusterName",
+			"value": ""
+		},
+		{
+			"key": "clusterName",
+			"value": ""
+		},
+		{
+			"key": "dataProtectionLocation",
+			"value": ""
+		}
+	]
+}
