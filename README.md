@@ -6,7 +6,7 @@ This collection is a number of tasks for operating VMware Tanzu Mission Control.
 The commands in this collection use the v1alpha1 APIs, which are currently the latest release. And should be used appropriately.
 
 * I have wrote a short blog on how to get started here:
-  > https://veducate.co.uk/postman-tmc-api/ 
+  > [Postman Collection for Tanzu Mission Control REST APIs](https://dy.si/R5hB4)
 
 * Official API Documentation here:
 
