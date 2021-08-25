@@ -332,7 +332,7 @@
 									"postman.clearEnvironmentVariable(\"installerLink\");",
 									"var data = JSON.parse(responseBody);",
 									"tests[\"installerLink is not null\"] = data.cluster.status.installerLink !== \"\";",
-									"postman.setEnvironmentVariable(\"installerLink\", data.cluster.status.installerLink);"
+									"pm.collectionVariables.set("installerLink", data.cluster.status.installerLink);"
 								],
 								"type": "text/javascript"
 							}
