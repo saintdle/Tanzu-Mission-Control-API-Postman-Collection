@@ -1984,7 +1984,7 @@
 									"variable": [
 										{
 											"key": "fullName.workspaceName",
-											"value": "openshift",
+											"value": "",
 											"description": "Mandatory"
 										},
 										{
