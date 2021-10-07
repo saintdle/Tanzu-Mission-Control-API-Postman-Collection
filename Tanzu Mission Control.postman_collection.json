@@ -29,7 +29,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "https://console.cloud.vmware.com/csp/gateway/am/api/auth/api-tokens/authorize?refresh_token={{refreshToken}}",
 							"protocol": "https",
@@ -369,7 +375,7 @@
 							"query": [
 								{
 									"key": "",
-									"value": null,
+									"value": "",
 									"disabled": true
 								}
 							]
@@ -1868,6 +1874,374 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Workspaces",
+			"item": [
+				{
+					"name": "Policies",
+					"item": [
+						{
+							"name": "List All Policies Attached to Workspace",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/workspaces/:policy.fullName.workspaceName/policies",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"workspaces",
+										":policy.fullName.workspaceName",
+										"policies"
+									],
+									"query": [
+										{
+											"key": "searchScope.name",
+											"value": "sunt aute incididunt",
+											"disabled": true
+										},
+										{
+											"key": "sortBy",
+											"value": "sunt aute incididunt",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "sunt aute incididunt",
+											"disabled": true
+										},
+										{
+											"key": "pagination.offset",
+											"value": "sunt aute incididunt",
+											"disabled": true
+										},
+										{
+											"key": "pagination.size",
+											"value": "sunt aute incididunt",
+											"disabled": true
+										},
+										{
+											"key": "includeTotalCount",
+											"value": "true",
+											"disabled": true
+										},
+										{
+											"key": "fullName.orgId",
+											"value": "sunt aute incididunt",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "policy.fullName.workspaceName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Specified Policy Attached to a Specified Workspace",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/workspaces/:fullName.workspaceName/policies/:fullName.name?fullName.orgId={{orgId}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"workspaces",
+										":fullName.workspaceName",
+										"policies",
+										":fullName.name"
+									],
+									"query": [
+										{
+											"key": "fullName.orgId",
+											"value": "{{orgId}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "fullName.workspaceName",
+											"value": "",
+											"description": "Mandatory"
+										},
+										{
+											"key": "fullName.name",
+											"value": "test",
+											"description": "Mandatory"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Network Policy Attached to Workspace",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"policy\": {\n        \"fullName\": {\n            \"name\": \"allow-all-test-policy\",\n            \"management_cluster_name\": \"\",\n            \"provisioner_name\": \"\"\n        },\n        \"spec\": {\n            \"type\": \"network-policy\",\n            \"recipe\": \"allow-all\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/workspaces/:policy.fullName.workspaceName/policies",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"workspaces",
+										":policy.fullName.workspaceName",
+										"policies"
+									],
+									"variable": [
+										{
+											"key": "policy.fullName.workspaceName",
+											"value": null,
+											"description": "Mandatory"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Custom Image Registry Policy Attached to Workspace",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"policy\": {\n        \"fullName\": {\n            \"name\": \"test\",\n            \"management_cluster_name\": \"\",\n            \"provisioner_name\": \"\"\n        },\n        \"spec\": {\n            \"type\": \"image-policy\",\n            \"recipe\": \"custom\",\n            \"input\": {\n                \"rules\": [\n                    {\n                        \"hostname\": \"quay.io\",\n                        \"tag\": {}\n                    }\n                ]\n            }\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/v1alpha1/workspaces/:policy.fullName.workspaceName/policies",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1alpha1",
+										"workspaces",
+										":policy.fullName.workspaceName",
+										"policies"
+									],
+									"variable": [
+										{
+											"key": "policy.fullName.workspaceName",
+											"value": null,
+											"description": "Mandatory"
+										}
+									]
+								},
+								"description": "This is an example to create a custom image registry policy directly against a workspace"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List All Workspaces",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v1alpha1/workspaces/:fullName.name",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"workspaces",
+								":fullName.name"
+							],
+							"query": [
+								{
+									"key": "fullName.orgId",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "fullName.name",
+									"value": "",
+									"description": "Mandatory"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Specified Workspace",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/workspaces/:fullName.name?fullName.orgId=sunt aute incididunt",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"workspaces",
+								":fullName.name"
+							],
+							"query": [
+								{
+									"key": "fullName.orgId",
+									"value": "sunt aute incididunt"
+								}
+							],
+							"variable": [
+								{
+									"key": "fullName.name",
+									"value": null,
+									"description": "Mandatory"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Specified Workspace",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/v1alpha1/workspaces/:fullName.name",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1alpha1",
+								"workspaces",
+								":fullName.name"
+							],
+							"query": [
+								{
+									"key": "fullName.orgId",
+									"value": "sunt aute incididunt",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "fullName.name",
+									"value": "",
+									"description": "Mandatory"
+								}
+							]
+						},
+						"description": "Full Name is mandatory"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Workspace",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workspace\": {\n        \"fullName\": {\n            \"name\": \"<<ChangeMe>>\"\n        },\n        \"meta\": {\n            \"description\": \"<<ChangeMe>>\",\n            \"labels\": {\n                \"key\":\"value\"\n                }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}//v1alpha1/workspaces",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"",
+								"v1alpha1",
+								"workspaces"
+							]
+						},
+						"description": "Edit the body as needed."
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -1893,7 +2267,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "XXXX.tmc.cloud.vmware.com"
+			"value": ""
 		},
 		{
 			"key": "refreshToken",
